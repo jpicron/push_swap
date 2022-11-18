@@ -1,0 +1,88 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_args.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jpicron <jpicron@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/17 16:07:40 by jpicron           #+#    #+#             */
+/*   Updated: 2022/11/18 13:37:59 by jpicron          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "push_swap.h"
+
+static int	ft_contains(int num, char **argv, int i)
+{
+	i++;
+	while (argv[i])
+	{
+		if (ft_atoi(argv[i]) == num)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+static int	ft_isnum(char *num)
+{
+	int	i;
+
+	i = 0;
+	if (num[0] == '-')
+		i++;
+	while (num[i])
+	{
+		if (!ft_isdigit(num[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+size_t	ft_strlen(const char *str)
+{
+	size_t	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
+
+static void	check_args(char *args, int i, char **argv)
+{
+	long	tmp;
+
+	if ((args[0] < '0' || args[0] > '9' ) && ft_strlen(args) == 1)
+		ft_error("Error");
+	tmp = ft_atoi(args);
+	if (!ft_isnum(args))
+		ft_error("Error");
+	if (ft_contains(tmp, argv, i))
+		ft_error("Error");
+	if (tmp < -2147483648 || tmp > 2147483647)
+		ft_error("Error");
+}
+
+void	ft_check_args(int argc, char **argv)
+{
+	int		i;
+	char	**args;	
+
+	i = 0;
+	if (argc == 2)
+		args = ft_split(argv[1], ' ');
+	else
+	{
+		i = 1;
+		args = argv;
+	}
+	while (args[i])
+	{
+		check_args(args[i], i, args);
+		i++;
+	}
+	if (argc == 2)
+		ft_free(args);
+}
